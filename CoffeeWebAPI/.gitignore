@@ -1,0 +1,25 @@
+# === Node / React ===
+node_modules
+.DS_Store
+npm-debug.log
+.vite/
+dist/
+.env.local
+.env.*.local
+
+# === .NET / Visual Studio ===
+*.sln.DotSettings.user
+*.user
+*.suo
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Secrets
+appsettings.Development.json
+secrets.json
+
+# OS generated files
+.AppleDouble
+Thumbs.db

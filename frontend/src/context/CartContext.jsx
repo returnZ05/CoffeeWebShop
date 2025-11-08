@@ -1,96 +1,110 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-// Segédfüggvény, ami az alkalmazás indulásakor betölti az adatot a localStorage-ból
-const loadUserFromStorage = () => {
-  const userString = localStorage.getItem('user');
-  return userString ? JSON.parse(userString) : null;
-};
 
-// 1. A Context létrehozása
 const CartContext = createContext();
 
-// 2. Létrehozunk egy "Provider"-t (ez adja az adatot)
 export function CartProvider({ children }) {
-  // === KOSÁR ÁLLAPOT ===
+
   const [cartItems, setCartItems] = useState([]);
-  
-  // === FELHASZNÁLÓI (AUTH) ÁLLAPOT ===
-  // Betöltjük az adatot a localStorage-ból, hogy a felhasználó bejelentkezve maradjon
-  const [user, setUser] = useState(loadUserFromStorage()); 
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')) || null);
+  const [token, setToken] = useState(() => localStorage.getItem('token') || null);
 
-  // --- FELHASZNÁLÓI (AUTH) FUNKCIÓK ---
+  const apiFetch = async (endpoint, options = {}) => {
+    if (!token) throw new Error('Nincs bejelentkezve');
 
-  // Ezt a LoginForm hívja meg sikeres bejelentkezéskor
-  const login = (userData, userToken) => {
-    // Elmentjük a React állapotába
-    setUser(userData);
-    setToken(userToken);
+    const defaultHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+
+    const response = await fetch(endpoint, {
+      ...options,
+      headers: {
+        ...defaultHeaders,
+        ...options.headers,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API Hiba (${response.status}): ${errorText}`);
+    }
     
-    // Elmentjük a böngésző tárhelyére is (hogy a frissítéskor is megmaradjon)
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('token', userToken);
+    return response.json();
   };
 
-  // Ezt a Header hívja meg
+
+  useEffect(() => {
+    const loadCart = async () => {
+      if (user) {
+        try {
+          const cartData = await apiFetch('/api/cart');
+          setCartItems(cartData.items || []);
+        } catch (error) {
+          console.error("Hiba a kosár betöltésekor:", error.message);
+        }
+      } else {
+        setCartItems([]);
+      }
+    };
+
+    loadCart();
+  }, [user]);
+
+
+  const login = (userData, userToken) => {
+    setUser(userData);
+    setToken(userToken);
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('token', userToken);
+
+  };
+
   const logout = () => {
-    // Töröljük a React állapotából
     setUser(null);
     setToken(null);
-    setCartItems([]); // Kijelentkezéskor ürítsük a kosarat is
-    
-    // Töröljük a böngésző tárhelyéről
+    setCartItems([]);
     localStorage.removeItem('user');
     localStorage.removeItem('token');
   };
 
-  // --- KOSÁR FUNKCIÓK ---
 
-  // Termék hozzáadása a kosárhoz
-  const addToCart = (product) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
-      
-      if (existingItem) {
-        // Ha már benne van, csak növeljük a mennyiségét
-        return prevItems.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        // Ha új termék, hozzáadjuk 1-es mennyiséggel
-        return [...prevItems, { ...product, quantity: 1 }];
-      }
-    });
-  };
-
-  // Termék törlése a kosárból
-  const removeFromCart = (productId) => {
-    setCartItems(prevItems => {
-      return prevItems.filter(item => item.id !== productId);
-    });
-  };
-
-  // Mennyiség frissítése
-  const updateQuantity = (productId, newQuantity) => {
-    const quantity = parseInt(newQuantity, 10);
-
-    if (quantity <= 0) {
-      removeFromCart(productId);
-      return;
+  const addToCart = async (product) => {
+    try {
+      const updatedCart = await apiFetch(`/api/cart/add/${product.id}`, {
+        method: 'POST'
+      });
+      setCartItems(updatedCart.items);
+    } catch (error) {
+      console.error("Hiba a kosárba tételkor:", error.message);
     }
-
-    setCartItems(prevItems => {
-      return prevItems.map(item =>
-        item.id === productId
-          ? { ...item, quantity: quantity }
-          : item
-      );
-    });
   };
 
-  // 3. Megosztjuk az ÖSSZES értéket és funkciót az alkalmazással
+  const removeFromCart = async (orderedItemId) => {
+    try {
+      const updatedCart = await apiFetch(`/api/cart/remove/${orderedItemId}`, {
+        method: 'DELETE'
+      });
+      setCartItems(updatedCart.items);
+    } catch (error) {
+      console.error("Hiba a tétel törlésekor:", error.message);
+    }
+  };
+
+  const updateQuantity = async (orderedItemId, newQuantity) => {
+    const quantity = parseInt(newQuantity, 10);
+    
+    try {
+
+      const updatedCart = await apiFetch(`/api/cart/update/${orderedItemId}/${quantity}`, {
+        method: 'PUT'
+      });
+      setCartItems(updatedCart.items);
+    } catch (error) {
+      console.error("Hiba a mennyiség frissítésekor:", error.message);
+    }
+  };
+
   return (
     <CartContext.Provider 
       value={{ 
@@ -98,7 +112,6 @@ export function CartProvider({ children }) {
         addToCart, 
         removeFromCart, 
         updateQuantity,
-        
         user,
         token,
         login,
@@ -110,7 +123,7 @@ export function CartProvider({ children }) {
   );
 }
 
-// 4. A "Hook" a könnyű eléréshez (ez változatlan)
+
 export function useCart() {
   return useContext(CartContext);
 }

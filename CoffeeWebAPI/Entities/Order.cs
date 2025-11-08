@@ -12,5 +12,6 @@ public class Order
     public int UserId { get; set; }
     public User? User { get; set; }
     public DateTime OrderDate { get; set; } = DateTime.Now;
+    public required string Status { get; set; } = "Pending";
     public List<Ordered>? Items { get; set; }
 }

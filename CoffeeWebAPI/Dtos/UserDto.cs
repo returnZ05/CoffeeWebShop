@@ -2,9 +2,9 @@ namespace CoffeeWebAPI.Dtos;
 
 public record class UserDto
 {
-    public int UserId;
-    public required string Username;
-    public required string Email;
-    private bool IsAdmin;
+    public int UserId { get; set; }
+    public required string Username { get; set; }
+    public required string Email { get; set; }
+    public required bool IsAdmin { get; set; }
 
 }

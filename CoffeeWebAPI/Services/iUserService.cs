@@ -9,5 +9,5 @@ public interface iUserService
 {
 
     public Task<UserDto> RegisterUser(RegisterDto registerDto);
-    public Task<UserDto> LoginUser(LoginDto loginDto);
+    Task<UserAuthDto> LoginUser(LoginDto loginDto);
 }

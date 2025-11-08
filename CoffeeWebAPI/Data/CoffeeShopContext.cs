@@ -25,12 +25,14 @@ public class CoffeeShopContext(DbContextOptions<CoffeeShopContext> options)
 
             user.HasIndex(u => u.Username).IsUnique();
             user.HasIndex(u => u.Email).IsUnique();
+            
         });
 
         modelBuilder.Entity<Product>(product =>
         {
             product.HasKey(p => p.ProductId);
-            
+            product.Property(p => p.Price)
+                   .HasColumnType("decimal(18, 2)");
         });
 
         modelBuilder.Entity<Order>(order =>
@@ -49,6 +51,9 @@ public class CoffeeShopContext(DbContextOptions<CoffeeShopContext> options)
             ordered.HasOne(o => o.Order)
                    .WithMany(ord => ord.Items)
                    .HasForeignKey(o => o.OrderId);
+            
+            ordered.Property(oi => oi.UnitPrice)
+                   .HasColumnType("decimal(18, 2)");
         });
 
 }

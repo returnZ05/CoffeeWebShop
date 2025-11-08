@@ -64,3 +64,176 @@ nav a:hover{
   background-color: #242424;
 
 }
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  
+  /* JAVÍTÁS:
+    Ez egy Fekete háttér (0, 0, 0), 
+    ami 70%-ban átlátszó (0.7).
+    Ez egy elegáns, sötétszürke "smoky" hatást ad.
+  */
+  background-color: rgba(0, 0, 0, 0.7);
+  
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  
+  /* BÓNUSZ:
+    Adjunk egy halvány szürke keretet is, hogy
+    a szélei jobban látszódjanak a sötét háttér előtt.
+  */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #fff; /* Fehér háttér a kártyáknak */
+
+  /* EZ AZ ÚJ RÉSZ: Fix méret és flexbox */
+  width: 100%; /* A grid cell szélességét tölti ki */
+  max-width: 300px; /* Maximum szélesség egy kártyának */
+  height: 350px; /* Fix magasság, hogy minden kártya egyforma legyen */
+  display: flex; /* Flexbox elrendezés */
+  flex-direction: column; /* Tartalom oszlopban */
+  justify-content: space-between; /* A tartalom elosztása */
+  align-items: center; /* Vízszintesen középre */
+  overflow: hidden; /* Ha valami kilógna, vágja le */
+}
+
+.product-card h3 {
+  margin: 10px 0 5px 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.product-card p {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #555;
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain; 
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: #f8f8f8; 
+}
+
+.cart-page-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  
+  /* Ugyanaz a "homályos üveg" háttér, mint a terméklistánál */
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white; /* Legyen a szöveg fehér a sötét háttér előtt */
+}
+
+.cart-page-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* A kosár kártyáinak listája */
+.cart-list {
+  display: flex;
+  flex-direction: column; /* A kosárban legyenek egymás alatt */
+  align-items: center; /* Vízszintesen középre */
+  gap: 15px;
+}
+
+/* src/index.css */
+
+/* Felülbíráljuk a product-card-ot, hogy a kosárban jobban nézzen ki */
+.cart-item-card {
+  max-width: 700px; /* Legyen szélesebb, mint egy termékkártya */
+  flex-direction: row; /* Vízszintes elrendezés */
+  justify-content: space-between; /* Helykihasználás */
+  align-items: center; /* Függőlegesen középre */
+  height: auto; /* A magasság igazodjon a tartalomhoz */
+  padding: 10px;
+}
+
+.cart-item-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-right: 15px;
+}
+
+/* Egy konténer a névnek és az árnak, hogy kitöltse a helyet */
+.cart-item-info {
+  flex-grow: 1; /* Ez kitölti a középső üres helyet */
+  text-align: left;
+}
+
+.cart-item-info h3 {
+  margin: 0;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.cart-item-info p {
+  margin: 5px 0 0 0;
+  color: #555;
+  font-weight: normal; /* A kosárban ne legyen félkövér az ár */
+}
+
+/* A mennyiség és részösszeg konténere */
+.cart-item-controls {
+  text-align: right;
+  margin-right: 15px;
+}
+
+.cart-item-controls .quantity-input {
+  width: 60px; /* Kisebb beviteli mező */
+  padding: 5px;
+  margin-left: 5px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.cart-item-controls p {
+  font-weight: bold;
+  color: #333;
+  margin: 5px 0 0 0;
+}
+
+/* Az új X (törlés) gomb stílusa */
+.remove-button {
+  background-color: #f44336; /* Piros háttér */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Kerek gomb */
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 0;
+  line-height: 30px; /* Középre igazítja az X-et */
+}
+
+.remove-button:hover {
+  background-color: #d32f2f; /* Sötétebb piros hoverre */
+}
+
+button:hover {
+  background-color: #45a049;
+}

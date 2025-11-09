@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using CoffeeWebAPI.Dtos;
 using CoffeeWebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeWebAPI.Controllers;
@@ -30,20 +32,37 @@ public class UsersController : ControllerBase
         }
     }
 
-[HttpPost("login")]
-public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
-{
-    try
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
+        try
+        {
 
-        var authResponse = await _userService.LoginUser(loginDto);
-        return Ok(authResponse);
+            var authResponse = await _userService.LoginUser(loginDto);
+            return Ok(authResponse);
+        }
+        catch (Exception ex)
+        {
+
+            return Unauthorized(ex.Message);
+        }
     }
-    catch (Exception ex)
+
+    [HttpPost("change-password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
     {
+        try
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            var userId = int.Parse(userIdClaim!.Value);
 
-        return Unauthorized(ex.Message);
+            await _userService.ChangePasswordAsync(userId, dto.OldPassword, dto.NewPassword);
+            return Ok("Jelszó sikeresen megváltoztatva.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
-}
-
 }

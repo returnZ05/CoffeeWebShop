@@ -25,6 +25,7 @@ builder.Services.AddDbContext<CoffeeWebAPI.Data.CoffeeShopContext>(options =>
 builder.Services.AddScoped<iUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 // Swagger szolgáltatás
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

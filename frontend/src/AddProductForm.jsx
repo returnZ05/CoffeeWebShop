@@ -1,20 +1,23 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from './context/CartContext.jsx';
+import './index.css';
 
 function AddProductForm() {
+  // Állapotok
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
-  const [image, setImage] = useState(''); // Egyelőre URL-t kérünk
+  const [image, setImage] = useState('');
+  const [description, setDescription] = useState('');
+  
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { token } = useCart();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
-
-    // 1. EZ A LÉNYEG: Olvassuk ki a "belépőkártyát" (tokent)
-    const token = localStorage.getItem('token');
 
     if (!token) {
       setError('Hiba: Nincs bejelentkezve.');
@@ -23,28 +26,26 @@ function AddProductForm() {
 
     const productData = {
       name,
-      price: parseFloat(price), // Biztos, ami biztos (string -> decimal)
-      quantity: parseInt(quantity), // string -> int
+      price: parseFloat(price),
+      quantity: parseInt(quantity),
       image,
+      description
     };
 
     try {
-      const response = await fetch('/api/Products', { // A POST /api/Products végpont
+      const response = await fetch('/api/Products', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // 2. EZ A MÁSIK LÉNYEG: Elküldjük a tokent a "Fejlécben"
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(productData),
       });
 
       if (response.ok) {
-        // Siker!
-        console.log('Termék sikeresen hozzáadva!');
-        navigate('/'); // Visszairányítjuk a főoldalra
+        alert('Termék sikeresen hozzáadva!');
+        navigate('/');
       } else {
-        // Hiba (pl. 401 Unauthorized, 403 Forbidden, 400 Bad Request)
         const errorText = await response.text();
         setError(`Hiba: ${response.status} - ${errorText}`);
       }
@@ -54,7 +55,7 @@ function AddProductForm() {
   };
 
   return (
-    <div className="add-product-page">
+    <div className="add-product-page"> {/* Használjuk az egységes stílusosztályt */}
       <h2>Új termék hozzáadása (Csak Admin)</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -73,8 +74,21 @@ function AddProductForm() {
           <label>Kép URL:</label>
           <input type="text" value={image} onChange={(e) => setImage(e.target.value)} required />
         </div>
+        
+        <div>
+          <label>Leírás:</label>
+          <textarea 
+            value={description} 
+            onChange={(e) => setDescription(e.target.value)}
+            rows="5"
+            required 
+          />
+        </div>
+        
         <button type="submit">Termék hozzáadása</button>
-        {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
+        
+        {/* A hibaüzenet is megkapja az osztályt */}
+        {error && <div className="error-message">{error}</div>}
       </form>
     </div>
   );

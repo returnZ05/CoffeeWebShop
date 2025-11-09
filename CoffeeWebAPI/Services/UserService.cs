@@ -122,4 +122,27 @@ private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] pas
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }   
+
+    public async Task ChangePasswordAsync(int userId, string oldPassword, string newPassword)
+{
+
+    var user = await _context.Users.FindAsync(userId);
+    if (user == null)
+    {
+        throw new Exception("Felhasználó nem található.");
+    }
+
+    if (!VerifyPasswordHash(oldPassword, user.PasswordHash, user.PasswordSalt))
+    {
+        throw new Exception("A régi jelszó helytelen.");
+    }
+
+    byte[] passwordSalt = RandomNumberGenerator.GetBytes(16);
+    using (var hmac = new HMACSHA512(passwordSalt))
+    {
+        user.PasswordSalt = passwordSalt;
+        user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(newPassword));
+    }
+    await _context.SaveChangesAsync();
+}
 }

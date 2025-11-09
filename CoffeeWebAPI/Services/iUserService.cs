@@ -10,4 +10,5 @@ public interface iUserService
 
     public Task<UserDto> RegisterUser(RegisterDto registerDto);
     Task<UserAuthDto> LoginUser(LoginDto loginDto);
+    Task ChangePasswordAsync(int userId, string oldPassword, string newPassword);
 }

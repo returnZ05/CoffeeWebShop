@@ -2,30 +2,26 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
   background-image: url('assets/background-img.png');
   background-size: cover;
 }
-h1{
+h1 {
   text-align: center;
   border: 1px solid red;
-
 }
-nav{
+nav {
   display: flex;
   overflow: hidden;
   background-color: #333333;
 }
-nav a{
+nav a {
   text-decoration: none;
   padding: auto;
   margin: auto;
@@ -35,15 +31,12 @@ nav a{
   color: white;
   text-align: center;
   padding: 14px 16px;
-  
 }
 
-nav a:hover{
+nav a:hover {
   background-color: gray;
-  
-
 }
-.userForm{
+.userForm {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,18 +44,17 @@ nav a:hover{
   margin-top: 40px;
   background-color: #242424;
 }
-.userForm form{
-    display: grid;
+.userForm form {
+  display: grid;
   grid-template-columns: auto 1fr;
   gap: 10px;
   align-items: center;
   width: 350px;
 }
 
-#regBtn{
+#regBtn {
   color: white;
   background-color: #242424;
-
 }
 
 .product-list {
@@ -73,21 +65,9 @@ nav a:hover{
   padding: 20px;
   max-width: 1200px;
   margin: 20px auto;
-  
-  /* JAVÍTÁS:
-    Ez egy Fekete háttér (0, 0, 0), 
-    ami 70%-ban átlátszó (0.7).
-    Ez egy elegáns, sötétszürke "smoky" hatást ad.
-  */
   background-color: rgba(0, 0, 0, 0.7);
-  
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  
-  /* BÓNUSZ:
-    Adjunk egy halvány szürke keretet is, hogy
-    a szélei jobban látszódjanak a sötét háttér előtt.
-  */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -96,18 +76,22 @@ nav a:hover{
   border-radius: 8px;
   padding: 16px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  background-color: #fff; /* Fehér háttér a kártyáknak */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 100%;
+  max-width: 300px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-  /* EZ AZ ÚJ RÉSZ: Fix méret és flexbox */
-  width: 100%; /* A grid cell szélességét tölti ki */
-  max-width: 300px; /* Maximum szélesség egy kártyának */
-  height: 350px; /* Fix magasság, hogy minden kártya egyforma legyen */
-  display: flex; /* Flexbox elrendezés */
-  flex-direction: column; /* Tartalom oszlopban */
-  justify-content: space-between; /* A tartalom elosztása */
-  align-items: center; /* Vízszintesen középre */
-  overflow: hidden; /* Ha valami kilógna, vágja le */
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .product-card h3 {
@@ -126,22 +110,20 @@ nav a:hover{
 .product-card img {
   width: 100%;
   height: 180px;
-  object-fit: contain; 
+  object-fit: contain;
   border-radius: 4px;
   margin-bottom: 10px;
-  background-color: #f8f8f8; 
+  background-color: #f8f8f8;
 }
 
 .cart-page-container {
   max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
-  
-  /* Ugyanaz a "homályos üveg" háttér, mint a terméklistánál */
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white; /* Legyen a szöveg fehér a sötét háttér előtt */
+  color: white;
 }
 
 .cart-page-container h2 {
@@ -149,23 +131,19 @@ nav a:hover{
   margin-bottom: 20px;
 }
 
-/* A kosár kártyáinak listája */
 .cart-list {
   display: flex;
-  flex-direction: column; /* A kosárban legyenek egymás alatt */
-  align-items: center; /* Vízszintesen középre */
+  flex-direction: column;
+  align-items: center;
   gap: 15px;
 }
 
-/* src/index.css */
-
-/* Felülbíráljuk a product-card-ot, hogy a kosárban jobban nézzen ki */
 .cart-item-card {
-  max-width: 700px; /* Legyen szélesebb, mint egy termékkártya */
-  flex-direction: row; /* Vízszintes elrendezés */
-  justify-content: space-between; /* Helykihasználás */
-  align-items: center; /* Függőlegesen középre */
-  height: auto; /* A magasság igazodjon a tartalomhoz */
+  max-width: 700px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
   padding: 10px;
 }
 
@@ -176,9 +154,8 @@ nav a:hover{
   margin-right: 15px;
 }
 
-/* Egy konténer a névnek és az árnak, hogy kitöltse a helyet */
 .cart-item-info {
-  flex-grow: 1; /* Ez kitölti a középső üres helyet */
+  flex-grow: 1;
   text-align: left;
 }
 
@@ -191,17 +168,16 @@ nav a:hover{
 .cart-item-info p {
   margin: 5px 0 0 0;
   color: #555;
-  font-weight: normal; /* A kosárban ne legyen félkövér az ár */
+  font-weight: normal;
 }
 
-/* A mennyiség és részösszeg konténere */
 .cart-item-controls {
   text-align: right;
   margin-right: 15px;
 }
 
 .cart-item-controls .quantity-input {
-  width: 60px; /* Kisebb beviteli mező */
+  width: 60px;
   padding: 5px;
   margin-left: 5px;
   text-align: center;
@@ -215,25 +191,338 @@ nav a:hover{
   margin: 5px 0 0 0;
 }
 
-/* Az új X (törlés) gomb stílusa */
 .remove-button {
-  background-color: #f44336; /* Piros háttér */
+  background-color: #f44336;
   color: white;
   border: none;
-  border-radius: 50%; /* Kerek gomb */
+  border-radius: 50%;
   width: 30px;
   height: 30px;
   font-weight: bold;
   font-size: 1em;
   cursor: pointer;
   padding: 0;
-  line-height: 30px; /* Középre igazítja az X-et */
+  line-height: 30px;
 }
 
 .remove-button:hover {
-  background-color: #d32f2f; /* Sötétebb piros hoverre */
+  background-color: #d32f2f;
+}
+
+button{
+  background-color: #45a049;
+}
+
+.home-page h2 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #305131;
+}
+.order-card {
+  width: 90%;
+  max-width: 800px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.order-card h4 {
+  color: #333;
+  margin-top: 0;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.order-item-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-item-row:last-child {
+  border-bottom: none;
+}
+
+.order-item-row img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 4px;
+  margin-right: 15px;
+  background-color: #f8f8f8;
+}
+
+.order-item-row .item-info {
+  flex-grow: 1;
+  text-align: left;
+  color: #333;
+}
+.order-item-row .item-info h3 {
+  margin: 0;
+}
+.order-item-row .item-info p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.order-item-row .item-details {
+  text-align: right;
+  color: #555;
+  font-weight: bold;
+  min-width: 150px;
+}
+
+.order-item-row .item-details p {
+  margin: 0;
+}
+
+.order-summary {
+  text-align: right;
+  color: #000;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #333;
+}
+
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cart-page-container .product-card {
+  max-width: 100%;
+  height: auto;
+  padding: 24px;
+  color: #333;
+}
+
+.product-card label {
+  display: block;
+  margin-bottom: 5px;
+  color: #000;
+  font-weight: 600;
+  text-align: left;
+}
+
+.product-card form input[type="text"],
+.product-card form input[type="password"],
+.product-card form input[type="tel"] {
+  width: 100%;
+  padding: 10px 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+.product-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-card form button {
+  align-self: flex-start;
+  margin-top: 10px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff9800;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.product-card form button:hover {
+  background-color: #e68900;
+}
+
+.cart-page-container .product-card-link {
+  color: #ff9800;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.cart-page-container .product-card-link:hover {
+  color: #e68900;
+  text-decoration: underline;
+}
+
+.add-product-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  padding: 20px;
+}
+
+.add-product-page form {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 15px 20px;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+
+.add-product-page form label {
+  color: white;
+  font-weight: 600;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.add-product-page form input[type="text"],
+.add-product-page form input[type="number"],
+.add-product-page form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #eee;
+  background-color: #444;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-product-page form input[type="text"]:focus,
+.add-product-page form input[type="number"]:focus,
+.add-product-page form textarea:focus {
+  border-color: #ff9800;
+  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.5);
+  outline: none;
+}
+
+.add-product-page form button {
+  grid-column: 1 / span 2;
+  justify-self: center;
+  width: 200px;
+  margin-top: 15px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff9800;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.add-product-page form button:hover {
+  background-color: #e68900;
+  transform: translateY(-2px);
+}
+
+.add-product-page .error-message {
+  grid-column: 1 / span 2;
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.user-menu-container {
+    position: relative;
+    display: flex; 
+    align-items: center;
+    margin-left: auto;
+    margin-right: 20px;
+    cursor: pointer;
+    /* Alapértelmezett háttérszín a teszteléshez */
+    background-color: transparent; 
+}
+
+/* A link, ami a hovert kiváltja */
+.user-profile-link {
+    display: flex;
+    align-items: center;
+    color: #ff9800;
+    padding: 14px 16px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+/* Hozzáadunk egy háttérszínt a profil linknek, ha fölötte van az egér, 
+   hogy lásd, a hover terület működik-e */
+.user-menu-container:hover .user-profile-link {
+    background-color: #555555; 
+}
+
+
+/* --- 2. LEGÖRDÜLŐ MENÜ (Láthatóság és Z-index biztosítása) --- */
+.dropdown-menu {
+    position: absolute;
+    top: 100%; /* Pontosan a profil link alatt kezdődik */
+    left: 0; 
+    
+    background-color: #333333;
+    min-width: 220px; 
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7); /* Erősebb árnyék */
+    
+    /* FONTOS: Magas Z-index, hogy biztosan minden felett legyen */
+    z-index: 9999; 
+    
+    /* Kezdetben rejtett, eltolás nélkül */
+    opacity: 0;
+    visibility: hidden;
+    /* A transform 0-án marad, hogy ne befolyásolja a pozíciót */
+    transform: translateY(0); 
+    transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+/* --- 3. MEGJELENÍTÉS HOVERRE (Erős felülírás) --- */
+.user-menu-container:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); /* Nincs eltolás */
+}
+.dropdown-item {
+    color: white; /* Alapértelmezett szövegszín legyen fehér */
+    padding: 12px 16px;
+    display: block;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+/* 2. Linkek stílusa (a "Rendeléseim" link) */
+.dropdown-menu a.dropdown-item {
+    color: white; /* Felülírja a böngésző alapértelmezett lila színét */
+    text-decoration: none; /* Eltávolítja az aláhúzást */
+}
+
+.dropdown-item:hover {
+    background-color: #555555; /* Kiemelés hoverkor */
+}
+
+/* 3. Kilépés menüpont (Piros szín) */
+.logout-item {
+    color: #f44336; /* Piros szín */
+    font-weight: bold;
+}
+
+/* Fontos: A linkek hoverkor is megtartják a fehér színt */
+.dropdown-menu a.dropdown-item:hover {
+    color: white;
+    text-decoration: none;
 }

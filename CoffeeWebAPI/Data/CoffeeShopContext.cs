@@ -52,6 +52,11 @@ public class CoffeeShopContext(DbContextOptions<CoffeeShopContext> options)
                    .WithMany(ord => ord.Items)
                    .HasForeignKey(o => o.OrderId);
             
+            ordered.HasOne(o => o.Product)
+                    .WithMany()
+                    .HasForeignKey(o => o.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
             ordered.Property(oi => oi.UnitPrice)
                    .HasColumnType("decimal(18, 2)");
         });

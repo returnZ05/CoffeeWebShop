@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useCart } from './context/CartContext.jsx';
 import './index.css';
-function CartPage() {
 
+function CartPage() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
 
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -34,7 +35,6 @@ function CartPage() {
                   id={`quantity-${item.orderedId}`}
                   value={item.quantity}
                   min="0"
-
                   onChange={(e) => updateQuantity(item.orderedId, e.target.value)}
                   className="quantity-input"
                 />
@@ -45,7 +45,6 @@ function CartPage() {
               <button 
                 className="remove-button"
                 title="Törlés a kosárból"
-
                 onClick={() => removeFromCart(item.orderedId)}
               >
                 X
@@ -58,7 +57,10 @@ function CartPage() {
       {cartItems.length > 0 && (
         <div className="cart-summary">
           <h3>Végösszeg: {totalPrice.toLocaleString()} Ft</h3>
-          <button>Tovább a pénztárhoz</button>
+          
+          <Link to="/checkout" className="checkout-button">
+            Tovább a pénztárhoz
+          </Link>
         </div>
       )}
     </div>

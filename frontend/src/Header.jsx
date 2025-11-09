@@ -7,12 +7,10 @@ function Header() {
   const { cartItems, user, logout } = useCart();
   const navigate = useNavigate();
 
-
   const handleLogout = () => {
     logout();
     navigate('/');
   };
-
 
   const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
 
@@ -20,11 +18,6 @@ function Header() {
 
   return (
     <header>
-      <h1>My Webshop</h1>
-      
-  
-      {user && <span className="welcome-message">Üdv, {user.username}!</span>}
-      
       <nav>
         <Link to="/">Főoldal</Link>
         
@@ -33,9 +26,6 @@ function Header() {
             {isAdmin && (
               <Link to="/admin/add-product">Termék hozzáadása</Link>
             )}
-            <button onClick={handleLogout} className="logout-button">
-              Kilépés
-            </button>
           </>
         ) : (
           <>
@@ -44,10 +34,36 @@ function Header() {
           </>
         )}
         
-        <Link to="/cart">
+        <Link to="/cart" className="cart-link">
           Kosár ({totalItemsInCart})
         </Link>
       </nav>
+
+      {user && (
+        <div className="user-menu-container">
+            
+            {/* VÁLTOZTATVA: 'user.username' helyett 'Profil' látható */}
+            <Link to="/profile" className="user-profile-link">
+                <span className="user-icon">👤</span>
+                Profil
+            </Link>
+
+            {/* A tényleges legördülő tartalom */}
+            <div className="dropdown-menu">
+                
+                {/* 1. Rendeléseim */}
+                <Link to="/my-orders" className="dropdown-item">
+                    Rendeléseim
+                </Link>
+
+                {/* 2. Kilépés */}
+                <div onClick={handleLogout} className="dropdown-item logout-item">
+                    Kilépés
+                </div>
+            </div>
+        </div>
+      )}
+
     </header>
   );
 }

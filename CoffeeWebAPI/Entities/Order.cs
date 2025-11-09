@@ -13,5 +13,9 @@ public class Order
     public User? User { get; set; }
     public DateTime OrderDate { get; set; } = DateTime.Now;
     public required string Status { get; set; } = "Pending";
-    public List<Ordered>? Items { get; set; }
+
+    public string? ShippingMethod { get; set; }
+    public string? PaymentMethod { get; set; }
+    public string? ShippingAddress { get; set; }
+    public List<Ordered> Items { get; set; }
 }

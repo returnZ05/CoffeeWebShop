@@ -3,6 +3,8 @@ using CoffeeWebAPI.Data;
 using CoffeeWebAPI.Dtos;
 using CoffeeWebAPI.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic; // Szükséges az IEnumerable-hez
+using System.Linq; // Szükséges a .Select-hez
 
 namespace CoffeeWebAPI.Services;
 
@@ -18,49 +20,97 @@ public class ProductService : IProductService
     public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
     {
         var products = await _context.Products
-                                 .AsNoTracking()
-                                 .ToListAsync();
+                                     .AsNoTracking()
+                                     .ToListAsync();
 
-
-        return products.Select(p => new ProductDto
-        {
-            Id = p.ProductId,
-            Name = p.Name,
-            Price = p.Price,
-            Quantity = p.Quantity,
-            Image = p.Image
-        });
+        // JAVÍTÁS: Következetesen a MapToDto segédfüggvényt használjuk
+        return products.Select(MapToDto);
     }
 
-    public async Task<ProductDto> CreateProductAsync(CreateProductDto createDto)
-    {
-        // Ellenőrzés (pl. létezik-e már ilyen nevű termék)
+   public async Task<ProductDto> CreateProductAsync(CreateProductDto createDto)
+   {
         if (await _context.Products.AnyAsync(p => p.Name == createDto.Name))
         {
             throw new Exception("Már létezik termék ezzel a névvel.");
         }
 
-        // Átalakítás entitássá
         var newProduct = new Product
         {
             Name = createDto.Name,
             Price = createDto.Price,
             Quantity = createDto.Quantity,
-            Image = createDto.Image
+            Image = createDto.Image,
+            Description = createDto.Description // Ez már helyes volt
         };
 
-        // Mentés
         _context.Products.Add(newProduct);
         await _context.SaveChangesAsync();
 
-        // Visszaadás DTO-ként (a friss ID-val)
+        // JAVÍTÁS: Következetesen a MapToDto segédfüggvényt használjuk
+        return MapToDto(newProduct);
+   }
+
+    public async Task<ProductDto> UpdateProductAsync(int productId, CreateProductDto updateDto)
+    {
+        var product = await _context.Products.FindAsync(productId);
+        if (product == null)
+        {
+            throw new Exception("A termék nem található.");
+        }
+
+        product.Name = updateDto.Name;
+        product.Price = updateDto.Price;
+        product.Quantity = updateDto.Quantity;
+        product.Image = updateDto.Image;
+        product.Description = updateDto.Description; // ⬅️ JAVÍTVA: Ez a sor hiányzott
+
+        await _context.SaveChangesAsync();
+
+        return MapToDto(product);
+    }
+
+    public async Task DeleteProductAsync(int productId)
+    {
+        var product = await _context.Products.FindAsync(productId);
+        if (product == null)
+        {
+            throw new Exception("A termék nem található.");
+        }
+
+        try
+        {
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException) // Jobb konkrét hibát elkapni
+        {
+            // Ezt már beállítottuk, hogy ne törölhessen rendelt terméket
+            throw new Exception("A termék nem törölhető, mert már szerepel egy vagy több korábbi rendelésben!");
+        }
+    }
+
+    public async Task<ProductDto> GetProductByIdAsync(int productId)
+    {
+        var product = await _context.Products.FindAsync(productId);
+        if (product == null)
+        {
+            throw new Exception("A termék nem található.");
+        }
+        
+        return MapToDto(product);
+    }
+
+    // A segédfüggvény, ami a build hibát okozta
+    private ProductDto MapToDto(Product product)
+    {
         return new ProductDto
         {
-            Id = newProduct.ProductId,
-            Name = newProduct.Name,
-            Price = newProduct.Price,
-            Quantity = newProduct.Quantity,
-            Image = newProduct.Image
+            Id = product.ProductId,
+            Name = product.Name,
+            Price = product.Price,
+            Quantity = product.Quantity,
+            Image = product.Image,
+            Description = product.Description // ⬅️ JAVÍTVA: Ez a sor hiányzott
         };
     }
 }

@@ -30,51 +30,51 @@ function Login() {
       });
 
       if (response.ok) {
-
         const authData = await response.json();
         console.log('Sikeres bejelentkezés!', authData);
-
-
         login(authData.user, authData.token);
-
         navigate('/');
-
       } else {
-
         const errorMessage = await response.text(); 
         setError(errorMessage);
         console.error('Hiba a bejelentkezésnél:', errorMessage);
       }
     } catch (error) {
-
       setError('Hálózati hiba. A szerver nem elérhető.');
       console.error('Hálózati hiba:', error);
     }
   };
 
   return (
-    <div className="login-page">
+    <div className="cart-page-container" style={{ maxWidth: '600px' }}>
       <h2>Bejelentkezés</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Felhasználónév:</label>
+      
+      <div className="product-card" style={{ maxWidth: '500px', margin: '0 auto' }}>
+
+        <form onSubmit={handleSubmit} className="standard-form">
+          
+          <label htmlFor="login-username">Felhasználónév:</label>
           <input
+            id="login-username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
-        </div>
-        <div>
-          <label>Jelszó:</label>
+          
+          <label htmlFor="login-password">Jelszó:</label>
           <input
+            id="login-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
-        </div>
-        <button type="submit">Bejelentkezés</button>
-        {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
-      </form>
+          
+          <button type="submit">Bejelentkezés</button>
+          {error && <div className="form-error">{error}</div>}
+        </form>
+      </div>
     </div>
   );
 }

@@ -126,20 +126,19 @@ export function CartProvider({ children }) {
     }
   };
 
-  const checkout = async () => {
-
+  const checkout = async (checkoutData) => {
     try {
-      const completedOrder = await apiFetch('/api/order/checkout', {
-        method: 'POST'
-      });
-      
-      setCartItems([]);
-      return completedOrder;
+        const completedOrder = await apiFetch('/api/order/checkout', {
+            method: 'POST',
+            body: JSON.stringify(checkoutData)
+        });
+        setCartItems([]); 
+        return completedOrder;
     } catch (error) {
-      console.error("Hiba a fizetés közben:", error.message);
-      throw error;
+        console.error("Hiba a fizetés közben:", error.message);
+        throw error;
     }
-  };
+};
 
 
   return (

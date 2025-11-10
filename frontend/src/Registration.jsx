@@ -1,17 +1,19 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './index.css';
 
 function Registration() {
-  // 1. LÉPÉS: Hozz létre state-eket az adatok tárolására
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  
+  const navigate = useNavigate();
 
-  // 2. LÉPÉS: Hozz létre egy 'submit' eseménykezelőt
   const handleSubmit = async (event) => {
-    // 3. LÉPÉS: Akadályozd meg az oldal újratöltését
     event.preventDefault();
+    setError(null);
 
-    // 4. LÉPÉS: Készítsd elő az adatokat (ez lesz a 'RegisterDto' a C# oldalon)
     const registerData = {
       username: username,
       email: email,
@@ -19,9 +21,7 @@ function Registration() {
     };
 
     try {
-      // 5. LÉPÉS: Küldd el az adatokat 'fetch'-csel a backendnek
-      // Figyelem: A '/api' a 'vite.config.js'-ben beállított proxy miatt működik!
-      const response = await fetch('/api/Users/register', { // C# kontroller útvonala
+      const response = await fetch('/api/Users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,47 +30,60 @@ function Registration() {
       });
 
       if (response.ok) {
-        // Sikeres regisztráció
-        const newUser = await response.json(); // Ez a UserDto, amit a C# visszaad
+        const newUser = await response.json();
         console.log('Sikeres regisztráció!', newUser);
-        // Ide jöhet az átirányítás a login oldalra
+        alert('Sikeres regisztráció! Most már bejelentkezhetsz.');
+        navigate('/login');
+
       } else {
-        // Sikertelen regisztráció (pl. email foglalt)
-        const errorData = await response.json(); // A C# által küldött hiba
-        console.error('Hiba a regisztrációnál:', errorData);
+        const errorMessage = await response.text(); 
+        setError(errorMessage);
+        console.error('Hiba a regisztrációnál:', errorMessage);
       }
     } catch (error) {
+      setError('Hálózati hiba. A szerver nem elérhető.');
       console.error('Hálózati hiba:', error);
     }
   };
 
-  // 6. LÉPÉS: Kösd össze a formot a state-ekkel és az eseménykezelővel
   return (
-    <div>
+    <div className="cart-page-container" style={{ maxWidth: '600px' }}>
       <h2>Regisztráció oldal</h2>
-      {/* NEM action="post", hanem onSubmit={...} */}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Felhasználónév:</label>
-          {/* Az 'onChange' frissíti a state-et minden gombnyomásra */}
+
+      <div className="product-card" style={{ maxWidth: '500px', margin: '0 auto' }}>
+        <form onSubmit={handleSubmit} className="standard-form">
+          
+          <label htmlFor="reg-username">Felhasználónév:</label>
           <input
-            type="text" value={username} onChange={(e) => setUsername(e.target.value)}
+            id="reg-username"
+            type="text" 
+            value={username} 
+            onChange={(e) => setUsername(e.target.value)}
+            required
           />
-        </div>
-        <div>
-          <label>Email:</label>
+          
+          <label htmlFor="reg-email">Email:</label>
           <input
-            type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+            id="reg-email"
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
-        </div>
-        <div>
-          <label>Jelszó:</label>
+          
+          <label htmlFor="reg-password">Jelszó:</label>
           <input
-            type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+            id="reg-password"
+            type="password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
-        </div>
-        <button type="submit">Regisztráció</button>
-      </form>
+
+          <button type="submit">Regisztráció</button>
+          {error && <div className="form-error">{error}</div>}
+        </form>
+      </div>
     </div>
   );
 }
